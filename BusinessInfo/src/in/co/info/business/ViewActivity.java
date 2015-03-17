@@ -1,6 +1,9 @@
 package in.co.info.business;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,8 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 /**
  * Created by marauder on 3/17/15.
@@ -51,6 +52,8 @@ public class ViewActivity extends Activity implements AdapterView.OnItemClickLis
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add:
+            	Intent i=new Intent(this,AddOrder.class);
+            	startActivity(i);
                 break;
         }
         return super.onMenuItemSelected(featureId, item);

@@ -1,5 +1,10 @@
 <resources>
 
     <string name="app_name">BusinessInfo</string>
-
+    <string-array name="state_array" >
+        <item>Agra</item>
+        <item>Bengal</item>
+        <item>Chattishgarh</item>
+        <item>Delhi</item>
+    </string-array>
 </resources>
