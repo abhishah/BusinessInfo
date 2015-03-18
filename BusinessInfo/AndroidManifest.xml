@@ -45,6 +45,8 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <service android:name=".service.ScheduleService" />
+        <service android:name=".service.NotifyService" />
     </application>
 
 </manifest>

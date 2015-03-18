@@ -1,5 +1,7 @@
 package in.co.info.business;
 
+import java.util.Calendar;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,7 +19,10 @@ class ReminderService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		long when = System.currentTimeMillis(); // notification time
+		//long when = System.currentTimeMillis(); // notification time
+		Calendar calendar = Calendar.getInstance(); 
+		//calendar.set(int year, int month, int date, int hour, int minute, int second); 
+		long when = calendar.getTimeInMillis();
 		Notification notification = new Notification(R.drawable.ic_launcher,
 				"reminder", when);
 		notification.defaults |= Notification.DEFAULT_SOUND;
