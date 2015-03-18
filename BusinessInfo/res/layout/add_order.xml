@@ -291,7 +291,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="35"
+                    android:layout_weight="25"
                     android:text="Order Date" />
 
                 <TextView
@@ -299,14 +299,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_weight="20" />
+                    android:layout_weight="35" />
 
                 <Button
                     android:id="@+id/myDatePickerButton1"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:layout_weight="45"
-                    android:text="Order Date" />
+                    android:layout_weight="40"
+                    android:text="Set" />
             </LinearLayout>
 <!-- 
             <LinearLayout
@@ -339,14 +339,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="35"
+                    android:layout_weight="25"
                     android:text="Due Date" />
 
                 <TextView
                     android:id="@+id/tAdvanceDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="20"
+                    android:layout_weight="35"
                     android:layout_marginTop="5dp"
                     android:text="" />
 
@@ -354,8 +354,8 @@
                     android:id="@+id/myDatePickerButton2"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:layout_weight="45"
-                    android:text="Set Due Date"
+                    android:layout_weight="40"
+                    android:text="Set"
                     android:visibility="visible" />
             </LinearLayout>
 

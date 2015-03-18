@@ -18,8 +18,8 @@ import android.util.Log;
 public class DetailsDatabase {
 
 	public static int version_code = 1;
-	public static String db_name = Environment
-			.getExternalStorageDirectory() + "/DetailsDatabase.db";
+	public static String db_name = Environment.getExternalStorageDirectory()
+			+ "/DetailsDatabase.db";
 
 	// table names to be used
 	public static final String details_table = "Details";
@@ -199,20 +199,22 @@ public class DetailsDatabase {
 	}
 
 	public ArrayList<HashMap<String, String>> fetchUserNames() {
-		Cursor cursor = ourDatabase.rawQuery("SELECT * FROM " + details_table,
-				null);
+		Cursor cursor = ourDatabase.rawQuery("SELECT * FROM " + details_table
+				+ " ORDER BY " + username + " ASC", null);
 		ArrayList<HashMap<String, String>> arr = null;
 		if (cursor != null && cursor.getCount() > 0) {
-			arr = new ArrayList<HashMap<String,String>>();
+			arr = new ArrayList<HashMap<String, String>>();
 			cursor.moveToFirst();
-			while(!cursor.isAfterLast()){
-				try{
-					HashMap<String,String> map = new HashMap<String, String>();
-					map.put(user_id, Integer.toString(cursor.getInt(cursor.getColumnIndexOrThrow(user_id))));
-					map.put(username, cursor.getString(cursor.getColumnIndexOrThrow(username)));
+			while (!cursor.isAfterLast()) {
+				try {
+					HashMap<String, String> map = new HashMap<String, String>();
+					map.put(user_id, Integer.toString(cursor.getInt(cursor
+							.getColumnIndexOrThrow(user_id))));
+					map.put(username, cursor.getString(cursor
+							.getColumnIndexOrThrow(username)));
 					arr.add(map);
 					cursor.moveToNext();
-				}catch(Exception e){
+				} catch (Exception e) {
 					Log.e("fetch error", e.toString());
 				}
 			}
@@ -220,4 +222,45 @@ public class DetailsDatabase {
 		return arr;
 	}
 
+	public Order showOrder(int uid) {
+		Order reqdOrder = null;
+		Cursor cursor = ourDatabase.rawQuery("SELECT * FROM " + details_table
+				+ " WHERE " + user_id + "=" + uid, null);
+
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			reqdOrder = new Order();
+			reqdOrder.setAddress(cursor.getString(cursor
+					.getColumnIndex(address)));
+			reqdOrder.setUser_id(cursor.getInt(cursor.getColumnIndex(user_id)));
+			reqdOrder.setUsername(cursor.getString(cursor
+					.getColumnIndex(username)));
+			reqdOrder.setVillage(cursor.getString(cursor
+					.getColumnIndex(village)));
+			reqdOrder.setCity(cursor.getString(cursor.getColumnIndex(city)));
+			reqdOrder.setDistrict(cursor.getString(cursor
+					.getColumnIndex(district)));
+			reqdOrder.setPincode(cursor.getString(cursor
+					.getColumnIndex(pincode)));
+			reqdOrder.setState(cursor.getString(cursor.getColumnIndex(state)));
+			reqdOrder.setItem_name(cursor.getString(cursor
+					.getColumnIndex(item_name)));
+			reqdOrder.setItem_id(cursor.getString(cursor
+					.getColumnIndex(item_id)));
+			reqdOrder.setAmount(cursor.getFloat(cursor.getColumnIndex(amount)));
+			reqdOrder
+					.setBalance(cursor.getFloat(cursor.getColumnIndex(amount)));
+			reqdOrder.setOrder_date(cursor.getString(cursor
+					.getColumnIndex(order_date)));
+			reqdOrder.setDue_date(cursor.getString(cursor
+					.getColumnIndex(due_date)));
+			reqdOrder
+					.setMobile(cursor.getString(cursor.getColumnIndex(mobile)));
+			reqdOrder.setLandline(cursor.getString(cursor
+					.getColumnIndex(landline)));
+			reqdOrder.setEmail(cursor.getString(cursor.getColumnIndex(email)));
+
+		}
+		return reqdOrder;
+	}
 }

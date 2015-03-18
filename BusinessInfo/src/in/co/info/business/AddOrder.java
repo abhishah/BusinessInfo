@@ -6,6 +6,7 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -165,6 +166,14 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		return null;
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent viewIntent = new Intent(this, ViewActivity.class);
+		startActivity(viewIntent);
+	}
+
 	private DatePickerDialog.OnDateSetListener pickerListenerP = new DatePickerDialog.OnDateSetListener() {
 
 		// when dialog box is closed, below method will be called.
@@ -210,6 +219,11 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 				&& sdistrict != "" && spin != "") {
 			Order givenorder = createObject();
 			details.addOrder(givenorder);
+			Toast.makeText(this, "Order added", Toast.LENGTH_LONG)
+			.show();
+			Intent intent = new Intent(this, ViewActivity.class);
+			startActivity(intent);
+			finish();
 
 		} else
 			Toast.makeText(this, "Enter Empty Fields", Toast.LENGTH_LONG)
@@ -262,7 +276,6 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		stotalpayment = totalpayment.getText().toString();
 		spaymentdate = paymentdate.getText().toString();
 		sadvancedate = order_date.getText().toString();
-		//sadvance = advance.getText().toString();
 		sbalance = stotalpayment;
 	}
 }

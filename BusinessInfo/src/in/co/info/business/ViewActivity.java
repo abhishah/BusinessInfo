@@ -50,8 +50,8 @@ public class ViewActivity extends Activity implements AdapterView.OnItemClickLis
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         orderList = updateData();
         if(orderList == null){
         	adapter = null;
@@ -81,6 +81,7 @@ public class ViewActivity extends Activity implements AdapterView.OnItemClickLis
             case R.id.add:
             	Intent i=new Intent(this,AddOrder.class);
             	startActivity(i);
+            	finish();
                 break;
         }
         return super.onMenuItemSelected(featureId, item);
@@ -88,6 +89,10 @@ public class ViewActivity extends Activity implements AdapterView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+    	int uid = Integer.parseInt(orderList.get(i).get("id"));
+    	Log.i("item clicked ", orderList.get(i).get("username"));
+    	Intent viewComplete = new Intent(this, ViewCompleteInfo.class);
+    	viewComplete.putExtra("id",uid);
+    	startActivity(viewComplete);
     }
 }
