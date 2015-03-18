@@ -7,10 +7,11 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_margin="5dp" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
@@ -24,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Full Name" />
+                    android:text="Full Name" />
 
                 <EditText
                     android:id="@+id/eName"
@@ -44,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Address" />
+                    android:text="Address" />
 
                 <EditText
                     android:id="@+id/eAddress"
@@ -65,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Village" />
+                    android:text="Village" />
 
                 <EditText
                     android:id="@+id/eVillage"
@@ -85,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  City" />
+                    android:text="City" />
 
                 <EditText
                     android:id="@+id/eCity"
@@ -105,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  District" />
+                    android:text="District" />
 
                 <EditText
                     android:id="@+id/eDistrict"
@@ -125,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Pin" />
+                    android:text="PinCode" />
 
                 <EditText
                     android:id="@+id/ePin"
@@ -145,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  State" />
+                    android:text="State" />
 
                 <Spinner
                     android:id="@+id/spinner1"
@@ -163,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Mobile" />
+                    android:text="Mobile" />
 
                 <EditText
                     android:id="@+id/eMobile"
@@ -185,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Landline" />
+                    android:text="Landline" />
 
                 <EditText
                     android:id="@+id/eLandline"
@@ -207,7 +208,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Email" />
+                    android:text="Email" />
 
                 <EditText
                     android:id="@+id/eEmail"
@@ -229,7 +230,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Item Name" />
+                    android:text="Item Name" />
 
                 <EditText
                     android:id="@+id/eItemName"
@@ -249,7 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Item Id" />
+                    android:text="Item Id" />
 
                 <EditText
                     android:id="@+id/eItemId"
@@ -269,20 +270,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="70"
-                    android:text="  Total Payment" />
+                    android:text="Total Amount" />
 
                 <EditText
                     android:id="@+id/eTotalPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="30"
-                    android:hint="Payment"
+                    android:hint="Item Amount"
                     android:inputType="numberDecimal" />
             </LinearLayout>
-
+	
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="100" >
 
@@ -290,23 +291,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:text="  Payment Date" />
+                    android:layout_weight="35"
+                    android:text="Order Date" />
 
                 <TextView
                     android:id="@+id/tPaymentDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="15" />
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="20" />
 
                 <Button
                     android:id="@+id/myDatePickerButton1"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:layout_weight="15"
-                    android:text="Date" />
+                    android:layout_weight="45"
+                    android:text="Order Date" />
             </LinearLayout>
-
+<!-- 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -327,7 +329,7 @@
                     android:hint="Advance"
                     android:inputType="numberDecimal" />
             </LinearLayout>
-
+ -->
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="60dp"
@@ -337,26 +339,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="70"
-                    android:text="  Advance Date" />
+                    android:layout_weight="35"
+                    android:text="Due Date" />
 
                 <TextView
                     android:id="@+id/tAdvanceDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="15"
-                    android:text="Date Advance" />
+                    android:layout_weight="20"
+                    android:layout_marginTop="5dp"
+                    android:text="" />
 
                 <Button
                     android:id="@+id/myDatePickerButton2"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:layout_weight="15"
-                    android:text="Date"
+                    android:layout_weight="45"
+                    android:text="Set Due Date"
                     android:visibility="visible" />
             </LinearLayout>
 
-            <LinearLayout
+    <!--         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="100" >
@@ -375,11 +378,11 @@
                     android:layout_weight="30"
                     android:inputType="numberDecimal"
                     android:hint="Balance" />
-            </LinearLayout>
+            </LinearLayout> -->
 
             <Button
                 android:id="@+id/Submit"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Submit"
                 android:visibility="visible" />

@@ -1,5 +1,6 @@
 package in.co.info.business;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -24,11 +25,12 @@ import android.widget.Toast;
 public class AddOrder extends Activity implements OnItemSelectedListener,
 		OnClickListener {
 
+	public DetailsDatabase details;
 	public EditText name, address, village, city, district, pin, mobile,
 			landline, email, itemname, itemid, totalpayment, advance, balance;
 	public Spinner state;
-	public TextView advancedate, paymentdate;
-	public Button datepayment, dateadvance, submit;
+	public TextView order_date, paymentdate;
+	public Button datepayment, dateorder, submit;
 	String sname, saddress, svillage, scity, sdistrict, spin, sstate, smobile,
 			slandline, semail, sitemname, sitemid, stotalpayment, sadvance,
 			sbalance, spaymentdate, sadvancedate = null;
@@ -43,6 +45,12 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		setContentView(R.layout.add_order);
 		setVariable();
 		initstring();
+		try {
+			details = new DetailsDatabase(this).open();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter
 				.createFromResource(this, R.array.state_array,
 						android.R.layout.simple_spinner_item);
@@ -55,7 +63,7 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
-		advancedate.setText(new StringBuilder()
+		order_date.setText(new StringBuilder()
 				// Month is 0 based, just add 1
 				.append(month + 1).append("-").append(day).append("-")
 				.append(year).append(" "));
@@ -74,7 +82,7 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 			}
 
 		});
-		dateadvance.setOnClickListener(new OnClickListener() {
+		dateorder.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -88,21 +96,22 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		submit.setOnClickListener(this);
 
 	}
-	private void initstring(){
-		sname=null;
-		saddress=null;
-		svillage=null;
-		scity=null;
-		sdistrict=null;
-		spin=null;
-		smobile=null;
-		slandline=null;
-		semail=null;
-		sitemname=null;
-		sitemid=null;
-		stotalpayment=null;
-		sadvance=null;
-		sbalance=null;
+
+	private void initstring() {
+		sname = null;
+		saddress = null;
+		svillage = null;
+		scity = null;
+		sdistrict = null;
+		spin = null;
+		smobile = null;
+		slandline = null;
+		semail = null;
+		sitemname = null;
+		sitemid = null;
+		stotalpayment = null;
+		sadvance = null;
+		sbalance = null;
 	}
 
 	private void setVariable() {
@@ -120,11 +129,9 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		itemid = (EditText) findViewById(R.id.eItemId);
 		totalpayment = (EditText) findViewById(R.id.eTotalPayment);
 		paymentdate = (TextView) findViewById(R.id.tPaymentDate);
-		advance = (EditText) findViewById(R.id.eAdvance);
-		advancedate = (TextView) findViewById(R.id.tAdvanceDate);
-		balance = (EditText) findViewById(R.id.eBalance);
+		order_date = (TextView) findViewById(R.id.tAdvanceDate);
 		datepayment = (Button) findViewById(R.id.myDatePickerButton1);
-		dateadvance = (Button) findViewById(R.id.myDatePickerButton2);
+		dateorder = (Button) findViewById(R.id.myDatePickerButton2);
 		submit = (Button) findViewById(R.id.Submit);
 		state = (Spinner) findViewById(R.id.spinner1);
 	}
@@ -188,7 +195,7 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 			day = selectedDay;
 
 			// Show selected date
-			advancedate.setText(new StringBuilder().append(month + 1)
+			order_date.setText(new StringBuilder().append(month + 1)
 					.append("-").append(day).append("-").append(year)
 					.append(" "));
 
@@ -198,41 +205,48 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 	@Override
 	public void onClick(View arg0) {
 		// TODO Auto-generated method stub
-        collectdata();
-        if(sname!="" && saddress!="" && svillage!="" && scity!="" && sdistrict!="" && spin!=""){
-        	Order givenorder=createObject();
-        	
-        }else Toast.makeText(this, "Enter Empty Fields", Toast.LENGTH_LONG).show();
+		collectdata();
+		if (sname != null && saddress != "" && svillage != "" && scity != ""
+				&& sdistrict != "" && spin != "") {
+			Order givenorder = createObject();
+			details.addOrder(givenorder);
+
+		} else
+			Toast.makeText(this, "Enter Empty Fields", Toast.LENGTH_LONG)
+					.show();
 	}
 
 	private Order createObject() {
 		// TODO Auto-generated method stub
-		//Toast.makeText(this, "Order creation called", Toast.LENGTH_LONG).show();
-		Order a=new Order();
-		try{a.setUsername(sname);
-		a.setAddress(saddress);
-		a.setVillage(svillage);
-		a.setCity(scity);
-		a.setDistrict(sdistrict);
-		a.setPincode(spin);
-		a.setState(sstate);
-		a.setMobile(smobile);
-		a.setLandline(slandline);
-		a.setEmail(semail);
-		a.setItem_name(sitemname);
-		a.setItem_id(sitemid);
-		float amount=Float.parseFloat(stotalpayment);
-		float balancerem=Float.parseFloat(sbalance);
-		a.setAmount(amount);
-		a.setBalance(balancerem);
-		a.setOrder_date(spaymentdate);
-		a.setDue_date(sadvancedate);
+		// Toast.makeText(this, "Order creation called",
+		// Toast.LENGTH_LONG).show();
+		Order a = new Order();
+		try {
+			a.setUsername(sname);
+			a.setAddress(saddress);
+			a.setVillage(svillage);
+			a.setCity(scity);
+			a.setDistrict(sdistrict);
+			a.setPincode(spin);
+			a.setState(sstate);
+			a.setMobile(smobile);
+			a.setLandline(slandline);
+			a.setEmail(semail);
+			a.setItem_name(sitemname);
+			a.setItem_id(sitemid);
+			float amount = Float.parseFloat(stotalpayment);
+			float balancerem = Float.parseFloat(sbalance);
+			a.setAmount(amount);
+			a.setBalance(balancerem);
+			a.setOrder_date(spaymentdate);
+			a.setDue_date(sadvancedate);
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), "Invalid Input",
+					Toast.LENGTH_LONG).show();
 		}
-		catch(Exception e){Toast.makeText(getApplicationContext(), "Invalid Input", Toast.LENGTH_LONG).show();}
 		return a;
 	}
 
-	
 	public void collectdata() {
 		sname = name.getText().toString();
 		saddress = address.getText().toString();
@@ -246,7 +260,9 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		sitemname = itemname.getText().toString();
 		sitemid = itemid.getText().toString();
 		stotalpayment = totalpayment.getText().toString();
-		sadvance = advance.getText().toString();
-		sbalance = balance.getText().toString();
+		spaymentdate = paymentdate.getText().toString();
+		sadvancedate = order_date.getText().toString();
+		//sadvance = advance.getText().toString();
+		sbalance = stotalpayment;
 	}
 }
