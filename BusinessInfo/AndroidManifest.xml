@@ -56,6 +56,10 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <service android:name=".service.ScheduleService" />
+        <service android:name=".service.NotifyService" />
+        <receiver android:name=".AlarmReceiver"/>
+
     </application>
 
 </manifest>

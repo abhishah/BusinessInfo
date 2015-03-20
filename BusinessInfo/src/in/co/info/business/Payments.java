@@ -9,7 +9,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,7 @@ public class Payments extends Activity implements OnClickListener {
 	int uid;
 	int year, month, day;
 	TextView view_date;
+	Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class Payments extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view_payments);
 		uid = getIntent().getIntExtra("id", 0);
+		context = this;
 		try {
 			detailsDb = new DetailsDatabase(this).open();
 		} catch (SQLException e) {
@@ -68,6 +72,16 @@ public class Payments extends Activity implements OnClickListener {
 		// TODO Auto-generated method stub
 		Log.i("user",uid +"");
 		return detailsDb.getPaymentsForUser(uid);
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Intent i = new Intent(this, ViewCompleteInfo.class);
+		i.putExtra("id", uid);
+		startActivity(i);
+		finish();
 	}
 
 	private void initializeViews() {
@@ -160,8 +174,16 @@ public class Payments extends Activity implements OnClickListener {
 								pcl.setUser_id(uid);
 								pcl.setPayment(Float.parseFloat(pay_amount.getText().toString()));
 								pcl.setPayment_date(view_date.getText().toString());
-								detailsDb.addPayment(pcl);
-								paymentList = updateData();
+								if(detailsDb.addPayment(pcl)){
+									Intent i = new Intent(context, ViewActivity.class);
+									startActivity(i);
+									finish();
+								}else{
+									Intent i = new Intent(context, ViewCompleteInfo.class);
+									i.putExtra("id",uid);
+									startActivity(i);
+									finish();
+								}
 							}
 						})
 				.setNegativeButton("Cancel",

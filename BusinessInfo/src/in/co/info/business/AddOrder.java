@@ -2,12 +2,17 @@ package in.co.info.business;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -40,6 +45,8 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 	private int day;
 	static final int DATE_PICKER_IDP = 1111;
 	static final int DATE_PICKER_IDA = 0000;
+	private ScheduleClient scheduleClient;
+	private PendingIntent alarmIntent;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,6 +102,9 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 
 		});
 		submit.setOnClickListener(this);
+		// Create a new service client and bind our activity to this service
+		scheduleClient = new ScheduleClient(this);
+		scheduleClient.doBindService();
 
 	}
 
@@ -219,15 +229,46 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 				&& sdistrict != "" && spin != "") {
 			Order givenorder = createObject();
 			details.addOrder(givenorder);
-			Toast.makeText(this, "Order added", Toast.LENGTH_LONG)
-			.show();
-			Intent intent = new Intent(this, ViewActivity.class);
-			startActivity(intent);
-			finish();
+			startAlarm(givenorder.due_date);
+			Toast.makeText(this, "Order added", Toast.LENGTH_LONG).show();
+		//	Intent intent = new Intent(this, ViewActivity.class);
+			//startActivity(intent);
+		//	finish();
 
 		} else
 			Toast.makeText(this, "Enter Empty Fields", Toast.LENGTH_LONG)
 					.show();
+	}
+
+	private void startAlarm(String date) {
+		String[] days = date.split("-");
+		String years[]=days[2].split(" ");
+		int year = Integer.parseInt(years[0]);
+		int day = Integer.parseInt(days[1]);
+		int month = Integer.parseInt(days[0]);
+		Log.e("year", " "+year+" "+day+" "+month);
+		//AlarmManager alarmManager = (AlarmManager) this
+			//	.getSystemService(this.ALARM_SERVICE);
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month, day, 18,52, 0);
+		Toast.makeText(getApplicationContext(), "Time:"+6, Toast.LENGTH_LONG).show();
+		// Ask our service to set an alarm for that date, this activity talks to
+		// the client that talks to the service
+		 Long time = new GregorianCalendar().getTimeInMillis()+60*06*24*1000;
+		 
+		    Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+		 
+		    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		    alarmIntent=PendingIntent.getBroadcast(this, 1, intentAlarm, 0);
+		 
+		    alarmManager.set(AlarmManager.RTC_WAKEUP,time, alarmIntent);
+		 
+		    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000 * 60*60*24, alarmIntent);
+		// Notify the user what they just did
+		Toast.makeText(
+				this,
+				"Notification set for: " + day + "/" + (month + 1) + "/" + year,
+				Toast.LENGTH_SHORT).show();
 	}
 
 	private Order createObject() {
@@ -277,5 +318,15 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		spaymentdate = paymentdate.getText().toString();
 		sadvancedate = order_date.getText().toString();
 		sbalance = stotalpayment;
+	}
+
+	@Override
+	protected void onStop() {
+		// When our activity is stopped ensure we also stop the connection to
+		// the service
+		// this stops us leaking our activity into the system *bad*
+		if (scheduleClient != null)
+			scheduleClient.doUnbindService();
+		super.onStop();
 	}
 }

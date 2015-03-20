@@ -251,7 +251,7 @@ public class DetailsDatabase {
 					.getColumnIndex(item_id)));
 			reqdOrder.setAmount(cursor.getFloat(cursor.getColumnIndex(amount)));
 			reqdOrder
-					.setBalance(cursor.getFloat(cursor.getColumnIndex(amount)));
+					.setBalance(cursor.getFloat(cursor.getColumnIndex(balance)));
 			reqdOrder.setOrder_date(cursor.getString(cursor
 					.getColumnIndex(order_date)));
 			reqdOrder.setDue_date(cursor.getString(cursor
@@ -277,11 +277,14 @@ public class DetailsDatabase {
 		
 		float bal = getBalance(payment_obj.getUser_id());
 		if(bal != -1){
+			Log.i("valid bal",bal+"");
 			bal -= payment_obj.getPayment();
+			Log.i("valid bal after",bal+"");
 			if(bal <= 0){
 				deleteRecord(payment_obj.getUser_id());
 				return true;
 			}else{
+				Log.i("valid bal after",bal+"");
 				setBalance(payment_obj.getUser_id(),bal);
 			}
 		}
@@ -297,8 +300,12 @@ public class DetailsDatabase {
 	}
 
 	public void setBalance(int uid, float bal) {
-		ourDatabase.rawQuery("UPDATE " + details_table + " SET " + balance
-				+ "=" + bal + " WHERE " + user_id + "=" + uid, null);
+		Log.i(uid+"", bal+"");
+		ContentValues cv = new ContentValues();
+		cv.put(balance, bal);
+		ourDatabase.update(details_table, cv, user_id + "='" + uid + "'", null);
+		/*ourDatabase.rawQuery("UPDATE " + details_table + " SET '" + balance
+				+ "'=" + bal + " WHERE " + user_id + "=" + uid, null);*/
 	}
 
 	public float getBalance(int uid) {
