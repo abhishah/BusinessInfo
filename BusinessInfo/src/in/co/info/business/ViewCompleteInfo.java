@@ -7,15 +7,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ViewCompleteInfo extends Activity{
+public class ViewCompleteInfo extends Activity implements OnClickListener{
 
 	DetailsDatabase detailsDb;
 	int uid;
 	TextView username, address, village, city, district,
     state, pincode, item_name, item_id, order_date, due_date, balance, amount;
+	
+	Button view_payment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -60,6 +65,7 @@ public class ViewCompleteInfo extends Activity{
 		due_date.setText(order.getDue_date());
 		amount.setText(order.getAmount() + "");
 		balance.setText(order.getBalance() + "");
+		
 	}
 
 	private void initializeViews() {
@@ -77,7 +83,8 @@ public class ViewCompleteInfo extends Activity{
 		balance = (TextView)findViewById(R.id.view_balance);
 		due_date  = (TextView)findViewById(R.id.view_due_date);
 		amount = (TextView)findViewById(R.id.view_amount);
-		
+		view_payment = (Button)findViewById(R.id.payments);
+		view_payment.setOnClickListener(this);
 		//******************* left for date picker
 		
 	}
@@ -93,4 +100,15 @@ public class ViewCompleteInfo extends Activity{
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         return super.onMenuItemSelected(featureId, item);
     }
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if(v.getId() == R.id.payments){
+			Intent intent = new Intent(this, Payments.class);
+			intent.putExtra("id",uid);
+			startActivity(intent);
+			finish();
+		}
+	}
 }

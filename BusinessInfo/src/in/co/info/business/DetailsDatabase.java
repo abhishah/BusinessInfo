@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by marauder on 3/17/15.
@@ -219,6 +220,7 @@ public class DetailsDatabase {
 				}
 			}
 		}
+		cursor.close();
 		return arr;
 	}
 
@@ -261,6 +263,82 @@ public class DetailsDatabase {
 			reqdOrder.setEmail(cursor.getString(cursor.getColumnIndex(email)));
 
 		}
+		cursor.close();
 		return reqdOrder;
+	}
+
+	public boolean addPayment(PaymentClass payment_obj){
+		ContentValues cv = new ContentValues();
+		cv.put(user_id, payment_obj.getUser_id());
+		cv.put(payment, payment_obj.getPayment());
+		cv.put(payment_date, payment_obj.getPayment_date());
+		
+		ourDatabase.insert(payments_table, null, cv);
+		
+		float bal = getBalance(payment_obj.getUser_id());
+		if(bal != -1){
+			bal -= payment_obj.getPayment();
+			if(bal <= 0){
+				deleteRecord(payment_obj.getUser_id());
+				return true;
+			}else{
+				setBalance(payment_obj.getUser_id(),bal);
+			}
+		}
+		return false;
+	}
+
+	public void deleteRecord(int uid) {
+
+		ourDatabase.rawQuery("DELETE FROM " + details_table + " WHERE "
+				+ user_id + "=" + uid, null);
+		ourDatabase.rawQuery("DELETE FROM " + payments_table + " WHERE "
+				+ user_id + "=" + uid, null);
+	}
+
+	public void setBalance(int uid, float bal) {
+		ourDatabase.rawQuery("UPDATE " + details_table + " SET " + balance
+				+ "=" + bal + " WHERE " + user_id + "=" + uid, null);
+	}
+
+	public float getBalance(int uid) {
+		float bal = -1;
+		Cursor cursor = ourDatabase.rawQuery("SELECT " + balance + " FROM "
+				+ details_table + " WHERE " + user_id + "=" + uid, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			bal = cursor.getFloat(cursor.getColumnIndexOrThrow(balance));
+		}
+		cursor.close();
+		return bal;
+	}
+
+	public ArrayList<HashMap<String, String>> getPaymentsForUser(int uid) {
+		ArrayList<HashMap<String, String>> arr = null;
+		Cursor cursor = ourDatabase.rawQuery("SELECT * FROM " + payments_table
+				+ " WHERE " + user_id + "=" + uid, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			arr = new ArrayList<HashMap<String, String>>();
+			while (!cursor.isAfterLast()) {
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put(payment, Float.toString(cursor.getFloat(cursor
+						.getColumnIndexOrThrow(payment))));
+				map.put(payment_date, cursor.getString(cursor
+						.getColumnIndexOrThrow(payment_date)));
+				Log.i("pay_val",Float.toString(cursor.getFloat(cursor
+						.getColumnIndexOrThrow(payment))));
+				arr.add(map);
+				cursor.moveToNext();
+			}
+			cursor.close();
+			return arr;
+		}
+		
+		
+
+	
+	cursor.close();
+	return null;
 	}
 }

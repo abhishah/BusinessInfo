@@ -3,10 +3,10 @@ package in.co.info.business;
 /**
  * Created by marauder on 3/17/15.
  */
-public class Payment {
+public class PaymentClass {
     String payment_date;
     int payment_id,user_id;
-    float payment;
+    float payment_value;
 
     public String getPayment_date() {
         return payment_date;
@@ -33,10 +33,10 @@ public class Payment {
     }
 
     public float getPayment() {
-        return payment;
+        return payment_value;
     }
 
     public void setPayment(float payment) {
-        this.payment = payment;
+        this.payment_value = payment;
     }
 }

@@ -27,12 +27,12 @@
                     android:layout_weight="70"
                     android:text="Full Name" />
 
-                <EditText
-                    android:id="@+id/eName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="30"
-                    android:hint="Full name" />
+	                <EditText
+	                    android:id="@+id/eName"
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_weight="30"
+	                    android:hint="Full name" />
             </LinearLayout>
 
             <LinearLayout
