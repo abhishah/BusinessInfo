@@ -2,12 +2,14 @@ package in.co.info.business;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +46,7 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 	static final int DATE_PICKER_IDP = 1111;
 	static final int DATE_PICKER_IDA = 0000;
 	private ScheduleClient scheduleClient;
+	private PendingIntent alarmIntent;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -244,13 +247,23 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		int day = Integer.parseInt(days[1]);
 		int month = Integer.parseInt(days[0]);
 		Log.e("year", " "+year+" "+day+" "+month);
-		AlarmManager alarmManager = (AlarmManager) this
-				.getSystemService(this.ALARM_SERVICE);
+		//AlarmManager alarmManager = (AlarmManager) this
+			//	.getSystemService(this.ALARM_SERVICE);
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month, day, 19,45, 0);
+		calendar.set(year, month, day, 18,52, 0);
+		Toast.makeText(getApplicationContext(), "Time:"+6, Toast.LENGTH_LONG).show();
 		// Ask our service to set an alarm for that date, this activity talks to
 		// the client that talks to the service
-		scheduleClient.setAlarmForNotification(calendar);
+		 Long time = new GregorianCalendar().getTimeInMillis()+60*06*24*1000;
+		 
+		    Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+		 
+		    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		    alarmIntent=PendingIntent.getBroadcast(this, 1, intentAlarm, 0);
+		 
+		    alarmManager.set(AlarmManager.RTC_WAKEUP,time, alarmIntent);
+		 
+		    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000 * 60*60*24, alarmIntent);
 		// Notify the user what they just did
 		Toast.makeText(
 				this,
