@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
-<item
+
+    <item
         android:id="@+id/call"
         android:checked="false"
+        android:enabled="false"
         android:icon="@drawable/ic_action_call"
         android:numericShortcut="1"
-        android:title="Call"
-        android:showAsAction="always" />
-    
-<item
+        android:visible="false"
+        android:showAsAction="always"
+        android:title="Call"/>
+    <item
         android:id="@+id/email"
         android:checked="false"
+        android:enabled="false"
+        android:visible="false"
         android:icon="@drawable/ic_action_new_email"
-        android:numericShortcut="1"
-        android:title="Email"
-        android:showAsAction="always" />
-
+        android:numericShortcut="2"
+        android:showAsAction="always"
+        android:title="Email"/>
 
 </menu>

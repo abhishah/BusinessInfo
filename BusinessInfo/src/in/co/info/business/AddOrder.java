@@ -231,9 +231,9 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 			details.addOrder(givenorder);
 			startAlarm(givenorder.due_date);
 			Toast.makeText(this, "Order added", Toast.LENGTH_LONG).show();
-		//	Intent intent = new Intent(this, ViewActivity.class);
-			//startActivity(intent);
-		//	finish();
+			Intent intent = new Intent(this, ViewActivity.class);
+			startActivity(intent);
+			finish();
 
 		} else
 			Toast.makeText(this, "Enter Empty Fields", Toast.LENGTH_LONG)
