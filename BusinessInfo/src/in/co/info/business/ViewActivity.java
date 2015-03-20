@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ public class ViewActivity extends Activity implements AdapterView.OnItemClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_orders);
+        setAlarms();
         detailsDb = new DetailsDatabase(this);
         try {
 			detailsDb.open();
@@ -49,7 +52,21 @@ public class ViewActivity extends Activity implements AdapterView.OnItemClickLis
         lv.setAdapter(adapter);
     }
 
-    @Override
+    private void setAlarms() {
+		// TODO Auto-generated method stub
+    	SharedPreferences getPrefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+    	SharedPreferences.Editor editor = getPrefs.edit();
+    	
+    	boolean isSet = getPrefs.getBoolean("alarm_set", false);
+    	if(!isSet){
+    		NotificationHandler.buildNotification(this);
+    		editor.putBoolean("alarm_set", true);
+    		editor.commit();
+    	}		
+	}
+
+	@Override
     protected void onResume() {
         super.onResume();
         orderList = updateData();

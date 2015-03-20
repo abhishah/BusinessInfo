@@ -45,8 +45,10 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 	private int day;
 	static final int DATE_PICKER_IDP = 1111;
 	static final int DATE_PICKER_IDA = 0000;
-	private ScheduleClient scheduleClient;
-	private PendingIntent alarmIntent;
+	
+	
+	//private ScheduleClient scheduleClient;
+	//private PendingIntent alarmIntent;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,8 +105,8 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		});
 		submit.setOnClickListener(this);
 		// Create a new service client and bind our activity to this service
-		scheduleClient = new ScheduleClient(this);
-		scheduleClient.doBindService();
+		//scheduleClient = new ScheduleClient(this);
+		//scheduleClient.doBindService();
 
 	}
 
@@ -229,16 +231,30 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 				&& sdistrict != "" && spin != "") {
 			Order givenorder = createObject();
 			details.addOrder(givenorder);
-			startAlarm(givenorder.due_date);
+			
+			
+			//startAlarm(givenorder.due_date);
 			Toast.makeText(this, "Order added", Toast.LENGTH_LONG).show();
-		//	Intent intent = new Intent(this, ViewActivity.class);
-			//startActivity(intent);
-		//	finish();
+			
+			//setNotification(sname,sbalance,sadvancedate);
+			
+			
+			Intent intent = new Intent(this, ViewActivity.class);
+			startActivity(intent);
+			finish();
 
 		} else
 			Toast.makeText(this, "Enter Empty Fields", Toast.LENGTH_LONG)
 					.show();
 	}
+/*
+	private void setNotification(String username,String balance, String due_date) {
+		// TODO Auto-generated method stub
+		int id = details.getId(username);
+		if(id != 0){
+			NotificationHandler.buildNotification(this,id, balance, due_date);
+		}
+	}*/
 
 	private void startAlarm(String date) {
 		String[] days = date.split("-");
@@ -259,11 +275,11 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		    Intent intentAlarm = new Intent(this, AlarmReceiver.class);
 		 
 		    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		    alarmIntent=PendingIntent.getBroadcast(this, 1, intentAlarm, 0);
+		   // alarmIntent=PendingIntent.getBroadcast(this, 1, intentAlarm, 0);
 		 
-		    alarmManager.set(AlarmManager.RTC_WAKEUP,time, alarmIntent);
+		//    alarmManager.set(AlarmManager.RTC_WAKEUP,time, alarmIntent);
 		 
-		    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000 * 60*60*24, alarmIntent);
+		//    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),1000 * 60*60*24, alarmIntent);
 		// Notify the user what they just did
 		Toast.makeText(
 				this,
@@ -325,8 +341,8 @@ public class AddOrder extends Activity implements OnItemSelectedListener,
 		// When our activity is stopped ensure we also stop the connection to
 		// the service
 		// this stops us leaking our activity into the system *bad*
-		if (scheduleClient != null)
-			scheduleClient.doUnbindService();
+		/*if (scheduleClient != null)
+			scheduleClient.doUnbindService();*/
 		super.onStop();
 	}
 }

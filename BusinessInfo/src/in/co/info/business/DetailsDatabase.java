@@ -267,25 +267,25 @@ public class DetailsDatabase {
 		return reqdOrder;
 	}
 
-	public boolean addPayment(PaymentClass payment_obj){
+	public boolean addPayment(PaymentClass payment_obj) {
 		ContentValues cv = new ContentValues();
 		cv.put(user_id, payment_obj.getUser_id());
 		cv.put(payment, payment_obj.getPayment());
 		cv.put(payment_date, payment_obj.getPayment_date());
-		
+
 		ourDatabase.insert(payments_table, null, cv);
-		
+
 		float bal = getBalance(payment_obj.getUser_id());
-		if(bal != -1){
-			Log.i("valid bal",bal+"");
+		if (bal != -1) {
+			Log.i("valid bal", bal + "");
 			bal -= payment_obj.getPayment();
-			Log.i("valid bal after",bal+"");
-			if(bal <= 0){
+			Log.i("valid bal after", bal + "");
+			if (bal <= 0) {
 				deleteRecord(payment_obj.getUser_id());
 				return true;
-			}else{
-				Log.i("valid bal after",bal+"");
-				setBalance(payment_obj.getUser_id(),bal);
+			} else {
+				Log.i("valid bal after", bal + "");
+				setBalance(payment_obj.getUser_id(), bal);
 			}
 		}
 		return false;
@@ -293,19 +293,23 @@ public class DetailsDatabase {
 
 	public void deleteRecord(int uid) {
 
-		ourDatabase.rawQuery("DELETE FROM " + details_table + " WHERE "
-				+ user_id + "=" + uid, null);
-		ourDatabase.rawQuery("DELETE FROM " + payments_table + " WHERE "
-				+ user_id + "=" + uid, null);
+		/*ourDatabase.rawQuery("DELETE FROM " + details_table + " WHERE "
+				+ user_id + "=" + uid, null);*/
+		ourDatabase.delete(details_table, user_id + "=" + uid,  null);
+		ourDatabase.delete(payments_table, user_id + "=" + uid,  null);
+		/*ourDatabase.rawQuery("DELETE FROM " + payments_table + " WHERE "
+				+ user_id + "=" + uid, null);*/
 	}
 
 	public void setBalance(int uid, float bal) {
-		Log.i(uid+"", bal+"");
+		Log.i(uid + "", bal + "");
 		ContentValues cv = new ContentValues();
 		cv.put(balance, bal);
 		ourDatabase.update(details_table, cv, user_id + "='" + uid + "'", null);
-		/*ourDatabase.rawQuery("UPDATE " + details_table + " SET '" + balance
-				+ "'=" + bal + " WHERE " + user_id + "=" + uid, null);*/
+		/*
+		 * ourDatabase.rawQuery("UPDATE " + details_table + " SET '" + balance +
+		 * "'=" + bal + " WHERE " + user_id + "=" + uid, null);
+		 */
 	}
 
 	public float getBalance(int uid) {
@@ -318,6 +322,18 @@ public class DetailsDatabase {
 		}
 		cursor.close();
 		return bal;
+	}
+
+	public int getId(String uname) {
+		int id = 0;
+		Cursor cursor = ourDatabase.rawQuery("SELECT " + user_id + " FROM "
+				+ details_table + " WHERE " + username + "='" + uname + "'",
+				null);
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			id = cursor.getInt(cursor.getColumnIndex(user_id));
+		}
+		return id;
 	}
 
 	public ArrayList<HashMap<String, String>> getPaymentsForUser(int uid) {
@@ -333,7 +349,7 @@ public class DetailsDatabase {
 						.getColumnIndexOrThrow(payment))));
 				map.put(payment_date, cursor.getString(cursor
 						.getColumnIndexOrThrow(payment_date)));
-				Log.i("pay_val",Float.toString(cursor.getFloat(cursor
+				Log.i("pay_val", Float.toString(cursor.getFloat(cursor
 						.getColumnIndexOrThrow(payment))));
 				arr.add(map);
 				cursor.moveToNext();
@@ -341,11 +357,35 @@ public class DetailsDatabase {
 			cursor.close();
 			return arr;
 		}
-		
-		
 
+		cursor.close();
+		return null;
+	}
+
+	public void setDueDate(int uid,String new_date){
+		ContentValues cv = new ContentValues();
+		cv.put(due_date, new_date);
+		ourDatabase.update(details_table, cv, user_id + "=" + uid, null );
+	}
 	
-	cursor.close();
-	return null;
+	public ArrayList<HashMap<String, String>> fetchNotificationData(String date) {
+		ArrayList<HashMap<String, String>> arr = null;
+		Cursor cursor = ourDatabase.rawQuery("SELECT * FROM " + details_table
+				+ " WHERE " + due_date + "='" + date + "'", null);
+		if (cursor != null && cursor.getCount() > 0) {
+			arr = new ArrayList<HashMap<String, String>>();
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put(user_id, Integer.toString(cursor.getInt(cursor
+						.getColumnIndexOrThrow(user_id))));
+				map.put(username, cursor.getString(cursor.getColumnIndex(username)));
+				map.put(balance, Float.toString(cursor.getFloat(cursor.getColumnIndexOrThrow(balance))));
+				map.put(due_date, cursor.getString(cursor.getColumnIndexOrThrow(due_date)));
+				arr.add(map);
+				cursor.moveToNext();
+			}
+		}
+		return arr;
 	}
 }
