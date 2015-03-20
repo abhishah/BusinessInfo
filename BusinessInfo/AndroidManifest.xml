@@ -7,6 +7,7 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -55,8 +56,6 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <service android:name=".service.ScheduleService" />
-        <service android:name=".service.NotifyService" />
         <receiver android:name=".AlarmReceiver"/>
 
     </application>

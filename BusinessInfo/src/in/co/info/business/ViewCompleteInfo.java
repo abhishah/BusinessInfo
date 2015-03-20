@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,19 +45,32 @@ public class ViewCompleteInfo extends Activity implements OnClickListener {
 			e.printStackTrace();
 		}
 		initializeViews();
+		int x = getIntent().getExtras().getInt("id");
+		Log.i("received id ",x +"");
 		uid = getIntent().getIntExtra("id", 0);
 		calling = false;
 		emailing = false;
 
 	}
 
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+		uid = intent.getIntExtra("id", 0);
+	}
+
+
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		Order order = detailsDb.showOrder(uid);
-		if (order == null) {
-			Toast.makeText(this, "Invalid Record", Toast.LENGTH_LONG).show();
+
+		if(order == null){
+			Toast.makeText(this, "Invalid Record " + uid, Toast.LENGTH_LONG).show();
 			finish();
 		} else {
 			setValues(order);

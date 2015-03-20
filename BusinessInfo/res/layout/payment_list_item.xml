@@ -5,19 +5,20 @@
     android:layout_margin="10dp"
     android:orientation="horizontal" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:id="@+id/list_item1"
-            android:layout_height="wrap_content"
-            android:layout_weight="40"
-            android:text="Order Amount" />
+    <TextView
+        android:id="@+id/list_item1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="40"
+        android:text="Order Amount"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/list_item2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Order Value"
-            android:layout_weight="60" />
-    
+    <TextView
+        android:id="@+id/list_item2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="60"
+        android:text="Order Value"
+        android:textSize="20sp" />
 
 </LinearLayout>
